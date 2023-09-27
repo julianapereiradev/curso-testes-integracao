@@ -12,33 +12,49 @@ describe("API test", () => {
   })
 
   it("should return 400 when elements is not a number", async () => {
-    const invalidQueries = ["aaa", "xyz", "123abc", "text", ""];
+   // const invalidQueries = ["aaa", "xyz", "123abc", "text", ""];
     
-    for (const query of invalidQueries) {
-      const parsedQuery = Number(query);
+   // for (const query of invalidQueries) {
+   //   const parsedQuery = Number(query);
 
-      const result = await api.get(`/fibonacci?elements=${parsedQuery}`);
+   //   const result = await api.get(`/fibonacci?elements=${parsedQuery}`);
       
-      if (isNaN(parsedQuery)) {
-        expect(result.status).toBe(400);
-        expect(result.text).toBe("Bad Request");
-      }
-    }
+   //   if (isNaN(parsedQuery)) {
+   //     expect(result.status).toBe(400);
+   //     expect(result.text).toBe("Bad Request");
+   //   }
+   // }
+
+    // resposta da prof:
+    const response = await api.get(`/fibonacci?elements=NaN`)
+    expect(response.status).toBe(400)
+
   });
 
   it("should return 400 when elements is < 1", async () => {
-    const invalidQueries = [0, -1, -20, -670078];
+   // const invalidQueries = [0, -1, -20, -670078];
     
-    for (const query of invalidQueries) {
+  // for (const query of invalidQueries) {
       
-      const result = await api.get(`/fibonacci?elements=${query}`);
+   //   const result = await api.get(`/fibonacci?elements=${query}`);
       
-      if (query < 1) {
-        expect(result.status).toBe(400);
-        expect(result.text).toBe("Bad Request");
-      }
-    }
+   //   if (query < 1) {
+    //    expect(result.status).toBe(400);
+   //     expect(result.text).toBe("Bad Request");
+    //  }
+   // }
+
+    const {status} = await api.get("/fibonacci?elements=-2")
+    expect(status).toBe(400)
+
   });
+
+  it("should return 400 when param is not a valid number", async () => {
+ 
+     const {status} = await api.get("/fibonacci")
+     expect(status).toBe(400)
+ 
+   });
 
   it("should return 400 when elements is higher than MAX.VALUE", async () => {
     const invalidQueries = [1.80e+308];
